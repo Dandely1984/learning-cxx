@@ -1,8 +1,6 @@
-﻿﻿//干什么
- #ifndef __EXERCISE_H__
+﻿﻿
+#ifndef __EXERCISE_H__
 #define __EXERCISE_H__
-
-#include <iostream>
 #include <numeric>
 #define ASSERT(COND, MSG)                                                                         \
     if (!(COND)) {                                                                                \
@@ -18,8 +16,6 @@
     }
 
 #endif// __EXERCISE_H__
-
-
 
 // READ: `std::accumulate` <https://zh.cppreference.com/w/cpp/algorithm/accumulate>
 
