@@ -1,4 +1,4 @@
-﻿﻿#define _CRT_SECURE_NO_WARNINGS
+﻿﻿
 #ifndef __EXERCISE_H__
 #define __EXERCISE_H__
 
