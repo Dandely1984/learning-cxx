@@ -1,9 +1,9 @@
-﻿﻿
-#ifndef __EXERCISE_H__
+﻿﻿//干什么
+ #ifndef __EXERCISE_H__
 #define __EXERCISE_H__
 
 #include <iostream>
-
+#include <numeric>
 #define ASSERT(COND, MSG)                                                                         \
     if (!(COND)) {                                                                                \
         std::cerr << "\x1b[31mAssertion failed at line #" << __LINE__ << ": \x1b[0m" << std::endl \
@@ -19,7 +19,7 @@
 
 #endif// __EXERCISE_H__
 
-#include <numeric>
+
 
 // READ: `std::accumulate` <https://zh.cppreference.com/w/cpp/algorithm/accumulate>
 
