@@ -1,6 +1,7 @@
 ﻿#include "../exercise.h"
-
+#include <cstring>
 // READ: 类模板 <https://zh.cppreference.com/w/cpp/language/class_template>
+
 
 template<class T>
 struct Tensor4D {
@@ -9,12 +10,11 @@ struct Tensor4D {
 
     Tensor4D(unsigned int const shape_[4], T const *data_) {
         unsigned int size = 1;
-        //TODO: 填入正确的 shape 并计算 size
-        for(int i=0;i<4;i++){
-            shape[i]=shape_[i];
-            size*=shape[i];
-        }
+        for(int i = 0; i <= 3; i++) size = size * shape_[i];
+        // TODO: 填入正确的 shape 并计算 size
+        for(int i = 0; i <= 3; i++)
 
+            shape[i] = shape_[i];
         data = new T[size];
         std::memcpy(data, data_, size * sizeof(T));
     }
@@ -32,31 +32,39 @@ struct Tensor4D {
     // 例如，`this` 形状为 `[1, 2, 3, 4]`，`others` 形状为 `[1, 2, 1, 4]`，
     // 则 `this` 与 `others` 相加时，3 个形状为 `[1, 2, 1, 4]` 的子张量各自与 `others` 对应项相加。
     Tensor4D &operator+=(Tensor4D const &others) {
-        // TODO: 实现单向广播的加法
-        for(int a1=0;a1<shape[0];a1++){
-            int a2=others.shape[0]==1?0:a1;
-            for(int b1=0;b1<shape[1];b1++){
-                int b2=others.shape[1]==1?0:b1;
-                for(int c1=0;c1<shape[2];c1++){
-                    int c2=others.shape[2]==1?0:c1;
-                    for(int d1=0;d1<shape[3];d1++){
-                        int d2=others.shape[3]==1?0:d1;
-                        int index1=a1*shape[1]*shape[2]*shape[3]+b1*shape[2]*shape[3]+c1*shape[3]+d1;
-                        int index2=a2*others.shape[1]*others.shape[2]*others.shape[3]+b2*others.shape[2]*others.shape[3]+
-                        c2*others.shape[3]+d2;
-                        data[index1]+=others.data[index2];
-                    }
+        // 检查形状是否兼容
+        unsigned int tensor_index_this [4] = {shape[1] * shape[2] * shape[3], shape[2]*shape[3], shape[3], 1};
+        unsigned int tensor_index_other[4] = {others.shape[1] * others.shape[2] * others.shape[3], others.shape[2]*others.shape[3], others.shape[3], 1};
+        for(int i = 0; i < shape[0]; i++){
+            for(int j = 0; j < shape[1]; j++){
+                for(int k = 0; k <shape[2]; k++){
+                    for(int p = 0; p < shape[3]; p++){
+                        int target_this   = i * tensor_index_this[0] + j * tensor_index_this[1] + k * tensor_index_this[2] + p *tensor_index_this[3];
+                        int i_ = others.shape[0] == 1 ? 0 : i;
+                        int j_ = others.shape[1] == 1 ? 0 : j;
+                        int k_ = others.shape[2] == 1 ? 0 : k;
+                        int p_ = others.shape[3] == 1 ? 0 : p;
+                        int target_others =  i_ * tensor_index_other[0] + j_ * tensor_index_other[1] + k_ * tensor_index_other[2] + p_ *tensor_index_other[3];
+                        data[target_this] = data[target_this] + others.data[target_others]; 
+                
                 }
             }
         }
+
         return *this;
     }
-};
+}
 
+        // 长宽高其实是我们抽象（shape）出来的，本质上还是一个一维数组
+        // 1 特征图个数
+        // 2 矩阵个数
+        // 3和4 是矩阵长宽
+};
 
 // ---- 不要修改以下代码 ----
 int main(int argc, char **argv) {
     {
+        // 3 是行 4是列
         unsigned int shape[]{1, 2, 3, 4};
         // clang-format off
         int data[]{
